@@ -35,18 +35,21 @@ export function Hero({ p }: { p: Proposal }) {
           Bar · Events · Experiences
         </p>
 
-        <p className="mt-[3vh] text-[0.68rem] font-bold uppercase tracking-[0.3em] text-gold">
+        <p className="mt-[2.4vh] text-[0.68rem] font-bold uppercase tracking-[0.3em] text-gold">
           Wedding quotation<span className="hidden sm:inline"> · {p.packageName}</span>
         </p>
-        <h1 className="mt-[1.2vh] font-display text-[clamp(2.2rem,min(8vh,10.5vw),4.6rem)] leading-[0.95] text-ink">
+        <h1 className="mt-[1.2vh] font-display text-[clamp(2.2rem,min(7.4vh,10.5vw),4.6rem)] leading-[0.95] text-ink">
           An open bar,
           <br />
           <em className="text-gold">beautifully poured</em>
         </h1>
         {p.preparedFor && (
-          <p className="mt-[1.5vh] font-display text-[clamp(1.2rem,2.6vh,1.6rem)] italic text-ink/80">
-            for {p.preparedFor}
-          </p>
+          <div className="mt-[1.4vh]">
+            <p className="text-[0.6rem] font-bold uppercase tracking-[0.35em] text-muted">Prepared for</p>
+            <p className="mt-[0.4vh] font-display text-[clamp(1.5rem,3.6vh,2.3rem)] italic leading-tight text-ink">
+              {p.preparedFor}
+            </p>
+          </div>
         )}
         <Ornament className="mx-auto mt-[2.2vh]" />
         <p className="mx-auto mt-[1.8vh] max-w-sm text-[0.78rem] leading-relaxed md:max-w-xl md:text-[clamp(0.85rem,1.8vh,1rem)] text-muted">

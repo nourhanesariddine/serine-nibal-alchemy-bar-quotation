@@ -5,7 +5,7 @@ import { Ornament, Wordmark } from "./ui";
 export function Footer({ p }: { p: Proposal }) {
   return (
     <footer className="pb-28 pt-6 text-center md:pb-10">
-      <PdfButton />
+      <PdfButton p={p} />
       <Ornament className="mx-auto mt-10" />
       <Wordmark className="mt-6 text-2xl" />
       <p className="mt-3 text-[0.62rem] font-semibold uppercase tracking-[0.4em] text-muted">

@@ -79,7 +79,7 @@ export const proposal: Proposal = {
     venue: null, // TODO: venue name
     guests: 200,
   },
-  preparedFor: null, // TODO: client name, e.g. "Maya & Karim"
+  preparedFor: "Serine & Nibal",
   issuedOn: "2026-10-15",
   intro:
     "A full open bar for your evening, set up, poured and served by the Alchemy team. Choose the add-ons you want and the total updates as you go.",
@@ -105,12 +105,12 @@ export const proposal: Proposal = {
     {
       id: "cups",
       title: "Customized premium cups",
-      body: "Premium plastic cups fully designed for you: Bride & Groom × Alchemy Bar.",
+      body: "Premium plastic cups fully designed for you: Serine & Nibal × Alchemy Bar.",
     },
     {
       id: "surprise",
       title: "A surprise in the drinks",
-      body: "A special surprise on the drinks for you and your guests. We're keeping this one a secret.",
+      body: "A special surprise on the drinks for you both and your guests. We're keeping this one a secret.",
     },
     {
       id: "theme",

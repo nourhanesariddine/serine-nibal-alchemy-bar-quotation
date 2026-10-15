@@ -16,7 +16,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Alchemy Bar · Proposal",
+  title: "Serine & Nibal · Alchemy Bar Quotation",
   description: "Your open bar proposal from Alchemy Bar · Events · Experiences",
 };
 
