@@ -139,7 +139,7 @@ function Frame() {
 }
 
 export function QuotationPdf({ p, selected, origin }: { p: Proposal; selected: string[]; origin: string }) {
-  const { base, lines, total, max } = computeTotal(p, selected);
+  const { base, fees, lines, total, max } = computeTotal(p, selected);
   const facts = [
     ["EVENT", p.event.type],
     ["GUESTS", String(p.event.guests)],
@@ -280,6 +280,13 @@ export function QuotationPdf({ p, selected, origin }: { p: Proposal; selected: s
               <Text>{l}</Text>
               <View style={s.leader} />
               <Text style={{ fontWeight: 700, fontSize: 6.5, color: C.sage }}>INCLUDED</Text>
+            </View>
+          ))}
+          {fees.map((f) => (
+            <View key={f.id} style={s.tabRow}>
+              <Text>{f.name}</Text>
+              <View style={s.leader} />
+              <Text style={{ fontWeight: 600 }}>{formatMoney(f.amount)}</Text>
             </View>
           ))}
           {lines.map((l) => (

@@ -8,7 +8,7 @@ import { SectionHeading } from "./ui";
 
 export function BuildYourBar({ p }: { p: Proposal }) {
   const { selected, toggle } = useSelection();
-  const { base, lines, total, max } = computeTotal(p, selected);
+  const { base, fees, lines, total, max } = computeTotal(p, selected);
 
   return (
     <section id="build">
@@ -115,6 +115,16 @@ export function BuildYourBar({ p }: { p: Proposal }) {
                 <span>{label}</span>
                 <span className="leader" />
                 <span className="text-xs font-bold uppercase tracking-[0.1em] text-sage">Included</span>
+              </li>
+            ))}
+            {fees.map((f) => (
+              <li key={f.id} className="flex items-baseline gap-2">
+                <span>
+                  {f.name}
+                  {f.description && <span className="block text-xs text-muted">{f.description}</span>}
+                </span>
+                <span className="leader" />
+                <span className="font-semibold tabular-nums">{formatMoney(f.amount)}</span>
               </li>
             ))}
             {p.addOns.map((a) => {

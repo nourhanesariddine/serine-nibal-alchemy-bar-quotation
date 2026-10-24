@@ -23,6 +23,14 @@ export type AddOn = {
   preselected?: boolean;
 };
 
+export type FixedFee = {
+  id: string;
+  name: string;
+  description?: string;
+  /** flat amount, not per guest */
+  amount: number;
+};
+
 export type GalleryItem = {
   src: string;
   alt: string;
@@ -57,6 +65,8 @@ export type Proposal = {
     sampleLine: string;
   };
   addOns: AddOn[];
+  /** Flat fees always added to the total (e.g. transportation) */
+  fixedFees: FixedFee[];
   gallery: GalleryItem[];
   pillars: { title: string; body: string }[];
   notes: string[];
@@ -150,6 +160,14 @@ export const proposal: Proposal = {
       ratePerGuest: 1,
     },
   ],
+  fixedFees: [
+    {
+      id: "transportation",
+      name: "Transportation",
+      description: "Transport of the bar, equipment and team to and from the venue.",
+      amount: 200,
+    },
+  ],
   gallery: [
     { src: "/images/event-toast.webp", alt: "Couple raising a toast beside their wedding cake", caption: "The toast" },
     { src: "/images/bartenders.webp", alt: "Two Alchemy bartenders shaking cocktails", caption: "Behind the bar" },
@@ -178,6 +196,7 @@ export const proposal: Proposal = {
     "The customized cups, the drinks surprise, the event theme and the bartenders' customized outfits are included in the package.",
     "Welcome drinks, tequila shots and rounds, and the premium bar upgrade are optional. Each selected add-on is charged at $1 per guest ($200 for 200 guests).",
     "The premium bar upgrade includes wine service and an enhanced bar setup and design. It does not change the quality or brands of the spirits in the standard package.",
+    "Transportation of the bar, equipment and team to and from the venue is charged as a flat fee of $200.",
     "Final pricing depends on the add-ons you select. The maximum total includes all three optional add-ons.",
   ],
   contact: {
