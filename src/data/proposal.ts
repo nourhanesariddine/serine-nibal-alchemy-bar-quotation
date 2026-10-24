@@ -94,7 +94,7 @@ export const proposal: Proposal = {
   preparedFor: "Serine & Nibal",
   issuedOn: "2026-10-15",
   intro:
-    "A full open bar for your evening, set up, poured and served by the Alchemy team, with the premium bar upgrade: an elevated bar setup and wine service. Choose the add-ons you want and the total updates as you go.",
+    "A full open bar for your evening, set up, poured and served by the Alchemy team, with our premium bar setup and presentation. Choose the add-ons you want and the total updates as you go.",
   currency: "USD",
   packagePrice: 1600,
   packageItems: [
@@ -108,7 +108,7 @@ export const proposal: Proposal = {
     },
     {
       category: "Premium bar",
-      selection: "Upgraded bar setup & presentation, with wine service",
+      selection: "Upgraded bar setup & presentation",
       tag: { label: "Included", kind: "included" },
     },
     {
@@ -192,7 +192,7 @@ export const proposal: Proposal = {
   ],
   notes: [
     "The open bar package is priced at $1,600 for 150 guests.",
-    "The premium bar is included: an upgraded bar setup and presentation and wine service alongside the spirits above.",
+    "The premium bar is included: an upgraded bar setup and presentation alongside the spirits above.",
     "Shots (vodka, gin and whiskey) are included in the package. Tequila shots and rounds are an optional add-on at $200.",
     "The customized cups, the drinks surprise, the event theme and the bartenders' customized outfits are included in the package.",
     "Welcome drinks and tequila shots and rounds are optional. Each selected add-on is charged at $200.",

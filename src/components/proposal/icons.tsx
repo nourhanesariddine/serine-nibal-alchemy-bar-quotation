@@ -46,7 +46,6 @@ export function WineIcon({ className }: P) {
 export const addOnIcons: Record<string, (p: P) => React.ReactElement> = {
   "welcome-drinks": CoupeIcon,
   tequila: ShotIcon,
-  "premium-bar": WineIcon,
 };
 
 export function CupIcon({ className }: P) {
