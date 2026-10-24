@@ -16,7 +16,7 @@ export function Hero({ p }: { p: Proposal }) {
   const facts = [
     { label: "Event", value: p.event.type },
     { label: "Guests", value: `${p.event.guests}` },
-    { label: "Base rate", value: `${formatMoney(p.baseRatePerGuest)} / guest` },
+    { label: "Venue", value: p.event.venue ?? "To be confirmed" },
     { label: "Date", value: p.event.date ? formatDate(p.event.date) : "To be confirmed" },
   ];
 
