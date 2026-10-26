@@ -1,5 +1,5 @@
 import type { Proposal } from "@/data/proposal";
-import { formatDate, formatMoney, startingPrice } from "@/lib/pricing";
+import { basePrice, formatDate, formatMoney } from "@/lib/pricing";
 import { Ornament, Wordmark } from "./ui";
 
 function Corner({ className }: { className: string }) {
@@ -16,7 +16,7 @@ export function Hero({ p }: { p: Proposal }) {
   const facts = [
     { label: "Event", value: p.event.type },
     { label: "Guests", value: `${p.event.guests}` },
-    { label: "Venue", value: p.event.venue ?? "To be confirmed" },
+    { label: "Base rate", value: `${formatMoney(p.baseRatePerGuest)} / guest` },
     { label: "Date", value: p.event.date ? formatDate(p.event.date) : "To be confirmed" },
   ];
 
@@ -70,7 +70,7 @@ export function Hero({ p }: { p: Proposal }) {
         <div className="mt-[3vh] inline-flex items-center gap-3 rounded-full border border-gold-bright/50 bg-cream px-5 py-[0.9vh]">
           <span className="text-[0.68rem] uppercase tracking-[0.2em] text-muted">Starting from</span>
           <span className="font-display text-[clamp(1.25rem,3vh,1.6rem)] font-semibold text-ink">
-            {formatMoney(startingPrice(p))}
+            {formatMoney(basePrice(p))}
           </span>
         </div>
       </div>

@@ -7,7 +7,7 @@ export function PackageSection({ p }: { p: Proposal }) {
     <section id="package">
       <SectionHeading
         index="01"
-        eyebrow="Premium package"
+        eyebrow="Standard package"
         title={
           <>
             The <em className="text-gold">bar menu</em>
@@ -23,9 +23,8 @@ export function PackageSection({ p }: { p: Proposal }) {
         <ul className="mt-6 space-y-5">
           {p.packageItems.map((item) => {
             const extra = item.tag?.kind === "extra";
-            const highlighted = extra || item.tag?.kind === "fee";
             return (
-              <li key={item.category} className={highlighted ? "-mx-2 rounded-xl border border-dashed border-gold-bright/60 bg-cream/60 px-3 py-3 sm:mx-0 sm:px-4" : ""}>
+              <li key={item.category} className={extra ? "-mx-2 rounded-xl border border-dashed border-gold-bright/60 bg-cream/60 px-3 py-3 sm:mx-0 sm:px-4" : ""}>
                 <div className="flex items-baseline gap-3">
                   <span className="whitespace-nowrap font-display text-[1.35rem] text-ink sm:text-2xl md:text-[1.7rem]">{item.category}</span>
                   <span className="leader" />
@@ -36,7 +35,7 @@ export function PackageSection({ p }: { p: Proposal }) {
                     {item.note && <span className="text-xs text-muted">{item.note}</span>}
                     <span
                       className={`rounded-full px-2.5 py-0.5 text-[0.68rem] font-bold uppercase tracking-[0.12em] ${
-                        highlighted ? "bg-gold-bright text-white" : "bg-sage/15 text-sage"
+                        extra ? "bg-gold-bright text-white" : "bg-sage/15 text-sage"
                       }`}
                     >
                       {item.tag.label}
@@ -55,7 +54,7 @@ export function PackageSection({ p }: { p: Proposal }) {
 
         <div className="mt-8 flex flex-col items-center justify-between gap-2 rounded-xl bg-cream px-5 py-4 text-center sm:flex-row sm:text-left">
           <span className="text-sm text-muted">
-            {p.packageName} · {p.event.guests} guests
+            {formatMoney(p.baseRatePerGuest)} per guest × {p.event.guests} guests
           </span>
           <span className="font-display text-3xl font-semibold text-ink">{formatMoney(basePrice(p))}</span>
         </div>

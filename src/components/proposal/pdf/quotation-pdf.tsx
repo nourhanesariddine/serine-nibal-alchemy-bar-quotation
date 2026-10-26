@@ -139,11 +139,11 @@ function Frame() {
 }
 
 export function QuotationPdf({ p, selected, origin }: { p: Proposal; selected: string[]; origin: string }) {
-  const { base, fees, lines, total, max } = computeTotal(p, selected);
+  const { base, lines, total, max } = computeTotal(p, selected);
   const facts = [
     ["EVENT", p.event.type],
     ["GUESTS", String(p.event.guests)],
-    ["VENUE", p.event.venue ?? "To be confirmed"],
+    ["BASE RATE", `${formatMoney(p.baseRatePerGuest)} / guest`],
     ["DATE", p.event.date ? formatDate(p.event.date) : "To be confirmed"],
   ];
   const photos = [
@@ -193,7 +193,7 @@ export function QuotationPdf({ p, selected, origin }: { p: Proposal; selected: s
           ))}
         </View>
 
-        <Section no="01" eyebrow="Premium package" title="The bar menu" />
+        <Section no="01" eyebrow="Standard package" title="The bar menu" />
         <View style={s.card}>
           {p.packageItems.map((item) => (
             <View key={item.category} wrap={false}>
@@ -202,7 +202,7 @@ export function QuotationPdf({ p, selected, origin }: { p: Proposal; selected: s
                 <View style={s.leader} />
                 <Text style={s.menuVal}>{item.selection}</Text>
                 {item.tag && (
-                  <Text style={[s.pill, item.tag.kind === "included" ? s.included : s.extra, { marginLeft: 6, marginBottom: 1 }]}>
+                  <Text style={[s.pill, item.tag.kind === "extra" ? s.extra : s.included, { marginLeft: 6, marginBottom: 1 }]}>
                     {item.tag.label.toUpperCase()}
                   </Text>
                 )}
@@ -211,7 +211,7 @@ export function QuotationPdf({ p, selected, origin }: { p: Proposal; selected: s
           ))}
           <View style={s.baseBox}>
             <Text style={{ color: C.muted }}>
-              {p.packageName} · {p.event.guests} guests
+              {formatMoney(p.baseRatePerGuest)} per guest × {p.event.guests} guests
             </Text>
             <Text style={{ fontFamily: "Cormorant", fontWeight: 600, fontSize: 16 }}>{formatMoney(basePrice(p))}</Text>
           </View>
@@ -256,7 +256,8 @@ export function QuotationPdf({ p, selected, origin }: { p: Proposal; selected: s
                   <Text style={[s.body, { marginTop: 1 }]}>{a.description}</Text>
                 </View>
                 <View style={{ alignItems: "flex-end", width: 70 }}>
-                  <Text style={{ fontFamily: "Cormorant", fontWeight: 600, fontSize: 13 }}>+{formatMoney(addOnPrice(a))}</Text>
+                  <Text style={{ fontFamily: "Cormorant", fontWeight: 600, fontSize: 13 }}>+{formatMoney(addOnPrice(p, a.ratePerGuest))}</Text>
+                  <Text style={{ fontSize: 6.5, color: C.muted }}>{formatMoney(a.ratePerGuest)} × {p.event.guests} guests</Text>
                   <Text style={{ fontSize: 6, fontWeight: 700, letterSpacing: 0.8, marginTop: 2, color: on ? C.gold : C.muted }}>
                     {on ? "SELECTED" : "NOT SELECTED"}
                   </Text>
@@ -270,7 +271,7 @@ export function QuotationPdf({ p, selected, origin }: { p: Proposal; selected: s
           <Text style={{ fontFamily: "Cormorant", fontStyle: "italic", fontSize: 17, textAlign: "center" }}>Your bar tab</Text>
           <View style={s.dash} />
           <View style={s.tabRow}>
-            <Text>{p.packageName} ({p.event.guests} guests)</Text>
+            <Text>Open bar package ({formatMoney(p.baseRatePerGuest)} × {p.event.guests})</Text>
             <View style={s.leader} />
             <Text style={{ fontWeight: 600 }}>{formatMoney(base)}</Text>
           </View>
@@ -279,13 +280,6 @@ export function QuotationPdf({ p, selected, origin }: { p: Proposal; selected: s
               <Text>{l}</Text>
               <View style={s.leader} />
               <Text style={{ fontWeight: 700, fontSize: 6.5, color: C.sage }}>INCLUDED</Text>
-            </View>
-          ))}
-          {fees.map((f) => (
-            <View key={f.id} style={s.tabRow}>
-              <Text>{f.name}</Text>
-              <View style={s.leader} />
-              <Text style={{ fontWeight: 600 }}>{formatMoney(f.amount)}</Text>
             </View>
           ))}
           {lines.map((l) => (

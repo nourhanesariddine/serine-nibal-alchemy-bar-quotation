@@ -1,4 +1,4 @@
-import type { AddOn, Proposal } from "@/data/proposal";
+import type { Proposal } from "@/data/proposal";
 
 export function formatMoney(value: number) {
   return new Intl.NumberFormat("en-US", {
@@ -9,33 +9,22 @@ export function formatMoney(value: number) {
 }
 
 export function basePrice(p: Proposal) {
-  return p.packagePrice;
+  return p.baseRatePerGuest * p.event.guests;
 }
 
-export function addOnPrice(a: AddOn) {
-  return a.price;
-}
-
-export function fixedFeesTotal(p: Proposal) {
-  return (p.fixedFees ?? []).reduce((s, f) => s + f.amount, 0);
-}
-
-/** Lowest possible total: package + flat fees, no add-ons */
-export function startingPrice(p: Proposal) {
-  return basePrice(p) + fixedFeesTotal(p);
+export function addOnPrice(p: Proposal, ratePerGuest: number) {
+  return ratePerGuest * p.event.guests;
 }
 
 export function computeTotal(p: Proposal, selected: Iterable<string>) {
   const ids = new Set(selected);
   const lines = p.addOns
     .filter((a) => ids.has(a.id))
-    .map((a) => ({ id: a.id, name: a.name, amount: addOnPrice(a) }));
+    .map((a) => ({ id: a.id, name: a.name, amount: addOnPrice(p, a.ratePerGuest) }));
   const base = basePrice(p);
-  const fees = p.fixedFees ?? [];
-  const feesTotal = fixedFeesTotal(p);
-  const total = base + feesTotal + lines.reduce((s, l) => s + l.amount, 0);
-  const max = base + feesTotal + p.addOns.reduce((s, a) => s + addOnPrice(a), 0);
-  return { base, fees, feesTotal, lines, total, max };
+  const total = base + lines.reduce((s, l) => s + l.amount, 0);
+  const max = base + p.addOns.reduce((s, a) => s + addOnPrice(p, a.ratePerGuest), 0);
+  return { base, lines, total, max };
 }
 
 export function formatDate(iso: string) {

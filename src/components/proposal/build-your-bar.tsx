@@ -8,7 +8,7 @@ import { SectionHeading } from "./ui";
 
 export function BuildYourBar({ p }: { p: Proposal }) {
   const { selected, toggle } = useSelection();
-  const { base, fees, lines, total, max } = computeTotal(p, selected);
+  const { base, lines, total, max } = computeTotal(p, selected);
 
   return (
     <section id="build">
@@ -22,17 +22,14 @@ export function BuildYourBar({ p }: { p: Proposal }) {
         }
         lead={
           <>
-            <span className="no-print">Tap to add any extras. </span>Each is a flat{" "}
-            <strong className="text-ink">{formatMoney(200)}</strong>, and your bar tab below updates as you choose.
+            <span className="no-print">Tap to add any extras. </span>Each is{" "}
+            <strong className="text-ink">{formatMoney(1)} per guest</strong>, and your bar tab below
+            updates as you choose.
           </>
         }
       />
 
-      <div
-        className={`mx-auto grid max-w-2xl gap-3 lg:gap-4 ${
-          p.addOns.length >= 3 ? "lg:max-w-none lg:grid-cols-3" : p.addOns.length === 2 ? "md:max-w-3xl md:grid-cols-2" : "lg:max-w-md"
-        }`}
-      >
+      <div className="mx-auto grid max-w-2xl gap-3 lg:max-w-none lg:grid-cols-3 lg:gap-4">
         {p.addOns.map((a) => {
           const on = selected.has(a.id);
           const Icon = addOnIcons[a.id];
@@ -43,10 +40,10 @@ export function BuildYourBar({ p }: { p: Proposal }) {
               role="checkbox"
               aria-checked={on}
               onClick={() => toggle(a.id)}
-              className={`group relative flex flex-col rounded-2xl border p-4 text-left transition duration-300 md:items-center md:px-5 md:pb-5 md:pt-7 md:text-center ${
+              className={`group relative flex flex-col rounded-2xl border p-4 text-left transition duration-300 lg:items-center lg:px-5 lg:pb-5 lg:pt-7 lg:text-center ${
                 on
-                  ? "border-gold-bright bg-cream shadow-[0_24px_50px_-28px_rgba(156,116,44,0.7)] md:-translate-y-1"
-                  : "border-line bg-paper hover:border-gold-bright/60 md:hover:-translate-y-0.5"
+                  ? "border-gold-bright bg-cream shadow-[0_24px_50px_-28px_rgba(156,116,44,0.7)] lg:-translate-y-1"
+                  : "border-line bg-paper hover:border-gold-bright/60 lg:hover:-translate-y-0.5"
               }`}
             >
               <span
@@ -57,29 +54,32 @@ export function BuildYourBar({ p }: { p: Proposal }) {
               >
                 ✓
               </span>
-              <span className="flex items-start gap-4 md:flex-1 md:flex-col md:items-center">
+              <span className="flex items-start gap-4 lg:flex-1 lg:flex-col lg:items-center">
                 <span
-                  className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full transition md:h-20 md:w-20 ${
+                  className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full transition lg:h-20 lg:w-20 ${
                     on ? "bg-gold-bright text-white" : "bg-cream text-gold"
                   }`}
                 >
-                  {Icon && <Icon className="h-8 w-8 md:h-11 md:w-11" />}
+                  {Icon && <Icon className="h-8 w-8 lg:h-11 lg:w-11" />}
                 </span>
-                <span className="flex-1 pr-7 md:pr-0">
-                  <span className="block font-display text-[1.45rem] leading-tight text-ink md:mt-1 md:text-2xl">
+                <span className="flex-1 pr-7 lg:pr-0">
+                  <span className="block font-display text-[1.45rem] leading-tight text-ink lg:mt-1 lg:text-2xl">
                     {a.name}
                   </span>
-                  <span className="mt-1 block text-sm leading-relaxed text-muted md:mt-2">{a.description}</span>
+                  <span className="mt-1 block text-sm leading-relaxed text-muted lg:mt-2">{a.description}</span>
                 </span>
               </span>
-              <span className="mt-4 flex w-full items-center justify-between gap-3 border-t border-line pt-4 md:flex-col md:border-0 md:pt-2">
-                <span className="md:text-center">
-                  <span className="block font-display text-2xl font-semibold leading-none text-ink md:text-3xl">
-                    +{formatMoney(addOnPrice(a))}
+              <span className="mt-4 flex w-full items-center justify-between gap-3 border-t border-line pt-4 lg:flex-col lg:border-0 lg:pt-2">
+                <span className="lg:text-center">
+                  <span className="block font-display text-2xl font-semibold leading-none text-ink lg:text-3xl">
+                    +{formatMoney(addOnPrice(p, a.ratePerGuest))}
+                  </span>
+                  <span className="mt-1 block text-xs text-muted">
+                    {formatMoney(a.ratePerGuest)} × {p.event.guests} guests
                   </span>
                 </span>
                 <span
-                  className={`no-print shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold transition md:w-full ${
+                  className={`no-print shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold transition lg:w-full ${
                     on ? "bg-ink text-white" : "border border-gold-bright/60 text-gold group-hover:bg-gold-bright group-hover:text-white"
                   }`}
                 >
@@ -102,8 +102,10 @@ export function BuildYourBar({ p }: { p: Proposal }) {
           <ul className="space-y-3 text-sm">
             <li className="flex items-baseline gap-2">
               <span>
-                {p.packageName}
-                <span className="block text-xs text-muted">{p.event.guests} guests</span>
+                Open bar package
+                <span className="block text-xs text-muted">
+                  {formatMoney(p.baseRatePerGuest)} × {p.event.guests} guests
+                </span>
               </span>
               <span className="leader" />
               <span className="font-semibold tabular-nums">{formatMoney(base)}</span>
@@ -113,16 +115,6 @@ export function BuildYourBar({ p }: { p: Proposal }) {
                 <span>{label}</span>
                 <span className="leader" />
                 <span className="text-xs font-bold uppercase tracking-[0.1em] text-sage">Included</span>
-              </li>
-            ))}
-            {fees.map((f) => (
-              <li key={f.id} className="flex items-baseline gap-2">
-                <span>
-                  {f.name}
-                  {f.description && <span className="block text-xs text-muted">{f.description}</span>}
-                </span>
-                <span className="leader" />
-                <span className="font-semibold tabular-nums">{formatMoney(f.amount)}</span>
               </li>
             ))}
             {p.addOns.map((a) => {
