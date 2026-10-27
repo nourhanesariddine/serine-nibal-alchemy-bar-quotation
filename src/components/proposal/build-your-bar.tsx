@@ -1,7 +1,7 @@
 "use client";
 
 import type { Proposal } from "@/data/proposal";
-import { addOnPrice, computeTotal, formatMoney } from "@/lib/pricing";
+import { addOnPrice, computeTotal, formatMoney, guestRangeLabel } from "@/lib/pricing";
 import { addOnIcons } from "./icons";
 import { useSelection } from "./selection";
 import { SectionHeading } from "./ui";
@@ -13,7 +13,7 @@ export function BuildYourBar({ p }: { p: Proposal }) {
   return (
     <section id="build">
       <SectionHeading
-        index="03"
+        index="04"
         eyebrow="Optional add-ons & upgrades"
         title={
           <>
@@ -22,9 +22,9 @@ export function BuildYourBar({ p }: { p: Proposal }) {
         }
         lead={
           <>
-            <span className="no-print">Tap to add any extras. </span>Each is{" "}
-            <strong className="text-ink">{formatMoney(1)} per guest</strong>, and your bar tab below
-            updates as you choose.
+            <span className="no-print">Tap to add any extras. </span>Each is a flat{" "}
+            <strong className="text-ink">{formatMoney(p.addOns[0]?.price ?? 0)}</strong> for the evening, and your bar tab
+            below updates as you choose.
           </>
         }
       />
@@ -72,11 +72,9 @@ export function BuildYourBar({ p }: { p: Proposal }) {
               <span className="mt-4 flex w-full items-center justify-between gap-3 border-t border-line pt-4 lg:flex-col lg:border-0 lg:pt-2">
                 <span className="lg:text-center">
                   <span className="block font-display text-2xl font-semibold leading-none text-ink lg:text-3xl">
-                    +{formatMoney(addOnPrice(p, a.ratePerGuest))}
+                    +{formatMoney(addOnPrice(a))}
                   </span>
-                  <span className="mt-1 block text-xs text-muted">
-                    {formatMoney(a.ratePerGuest)} × {p.event.guests} guests
-                  </span>
+                  <span className="mt-1 block text-xs text-muted">Flat, for the whole evening</span>
                 </span>
                 <span
                   className={`no-print shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold transition lg:w-full ${
@@ -102,10 +100,8 @@ export function BuildYourBar({ p }: { p: Proposal }) {
           <ul className="space-y-3 text-sm">
             <li className="flex items-baseline gap-2">
               <span>
-                Open bar package
-                <span className="block text-xs text-muted">
-                  {formatMoney(p.baseRatePerGuest)} × {p.event.guests} guests
-                </span>
+                {p.packageName}
+                <span className="block text-xs text-muted">Event package · {guestRangeLabel(p)}</span>
               </span>
               <span className="leader" />
               <span className="font-semibold tabular-nums">{formatMoney(base)}</span>

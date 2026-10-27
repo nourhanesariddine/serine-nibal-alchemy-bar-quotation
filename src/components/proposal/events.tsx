@@ -8,7 +8,7 @@ export function EventsSection({ p }: { p: Proposal }) {
   return (
     <section id="events">
       <SectionHeading
-        index="04"
+        index="05"
         eyebrow="Our events"
         title={
           <>

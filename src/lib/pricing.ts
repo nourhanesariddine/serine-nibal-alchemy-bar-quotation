@@ -1,4 +1,4 @@
-import type { Proposal } from "@/data/proposal";
+import type { AddOn, Proposal } from "@/data/proposal";
 
 export function formatMoney(value: number) {
   return new Intl.NumberFormat("en-US", {
@@ -8,22 +8,28 @@ export function formatMoney(value: number) {
   }).format(value);
 }
 
+/** The fixed event package price — the same for any guest count within the range. */
 export function basePrice(p: Proposal) {
-  return p.baseRatePerGuest * p.event.guests;
+  return p.packagePrice;
 }
 
-export function addOnPrice(p: Proposal, ratePerGuest: number) {
-  return ratePerGuest * p.event.guests;
+export function guestRangeLabel(p: Proposal) {
+  return `${p.event.guestRange.min}\u2013${p.event.guestRange.max} guests`;
+}
+
+/** Add-ons are flat for the whole event, like the package. */
+export function addOnPrice(a: AddOn) {
+  return a.price;
 }
 
 export function computeTotal(p: Proposal, selected: Iterable<string>) {
   const ids = new Set(selected);
   const lines = p.addOns
     .filter((a) => ids.has(a.id))
-    .map((a) => ({ id: a.id, name: a.name, amount: addOnPrice(p, a.ratePerGuest) }));
+    .map((a) => ({ id: a.id, name: a.name, amount: addOnPrice(a) }));
   const base = basePrice(p);
   const total = base + lines.reduce((s, l) => s + l.amount, 0);
-  const max = base + p.addOns.reduce((s, a) => s + addOnPrice(p, a.ratePerGuest), 0);
+  const max = base + p.addOns.reduce((s, a) => s + addOnPrice(a), 0);
   return { base, lines, total, max };
 }
 

@@ -1,5 +1,5 @@
 import type { Proposal } from "@/data/proposal";
-import { basePrice, formatMoney } from "@/lib/pricing";
+import { basePrice, formatMoney, guestRangeLabel } from "@/lib/pricing";
 import { SectionHeading } from "./ui";
 
 export function PackageSection({ p }: { p: Proposal }) {
@@ -7,13 +7,13 @@ export function PackageSection({ p }: { p: Proposal }) {
     <section id="package">
       <SectionHeading
         index="01"
-        eyebrow="Standard package"
+        eyebrow="Your package"
         title={
           <>
             The <em className="text-gold">bar menu</em>
           </>
         }
-        lead="Everything below is poured all evening and included in your base price, apart from anything marked as extra."
+        lead="Everything below is poured all evening and included in your package price, apart from anything marked as extra."
       />
 
       <div className="mx-auto max-w-2xl rounded-2xl border border-line bg-paper p-5 shadow-[0_20px_60px_-40px_rgba(90,70,30,0.5)] md:p-10">
@@ -52,11 +52,23 @@ export function PackageSection({ p }: { p: Proposal }) {
           })}
         </ul>
 
-        <div className="mt-8 flex flex-col items-center justify-between gap-2 rounded-xl bg-cream px-5 py-4 text-center sm:flex-row sm:text-left">
-          <span className="text-sm text-muted">
-            {formatMoney(p.baseRatePerGuest)} per guest × {p.event.guests} guests
-          </span>
-          <span className="font-display text-3xl font-semibold text-ink">{formatMoney(basePrice(p))}</span>
+        <div className="mt-8 rounded-xl border border-gold-bright/40 bg-cream px-5 py-5 md:px-7">
+          <div className="flex flex-col items-center gap-3 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left">
+            <div>
+              <p className="text-[0.62rem] font-bold uppercase tracking-[0.28em] text-gold">Event package</p>
+              <p className="mt-1 font-display text-2xl leading-tight text-ink">{p.packageName}</p>
+              <p className="mt-1 text-xs text-muted">
+                One price for the evening · {guestRangeLabel(p)} · {p.event.guests} confirmed
+              </p>
+            </div>
+            <p className="font-display text-4xl font-semibold tabular-nums text-ink">{formatMoney(basePrice(p))}</p>
+          </div>
+          <p className="mt-4 border-t border-gold-bright/30 pt-3 text-center text-xs leading-relaxed text-muted sm:text-left">
+            Priced for the night as a whole, not per guest.{" "}
+            <a href="#pricing" className="font-semibold text-gold hover:underline">
+              How we price ↓
+            </a>
+          </p>
         </div>
       </div>
     </section>

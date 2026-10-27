@@ -6,7 +6,7 @@ export function TouchesSection({ p }: { p: Proposal }) {
   return (
     <section id="touches">
       <SectionHeading
-        index="02"
+        index="03"
         eyebrow="Included in your package"
         title={
           <>

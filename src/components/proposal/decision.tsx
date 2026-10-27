@@ -47,7 +47,7 @@ export function Decision({ p }: { p: Proposal }) {
   return (
     <section id="decision" className="no-print mx-auto max-w-3xl">
       <SectionHeading
-        index="06"
+        index="07"
         eyebrow="Your decision"
         title={
           <>

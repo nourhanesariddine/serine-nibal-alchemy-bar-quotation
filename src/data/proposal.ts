@@ -19,7 +19,8 @@ export type AddOn = {
   id: string;
   name: string;
   description: string;
-  ratePerGuest: number;
+  /** flat price for the whole event */
+  price: number;
   preselected?: boolean;
 };
 
@@ -41,13 +42,26 @@ export type Proposal = {
     /** ISO date, or null if not confirmed yet */
     date: string | null;
     venue: string | null;
+    /** confirmed guest count — used for per-guest add-ons */
     guests: number;
+    /** the package price holds across this range */
+    guestRange: { min: number; max: number };
   };
   preparedFor: string | null;
   issuedOn: string;
   intro: string;
   currency: "USD";
-  baseRatePerGuest: number;
+  /** Fixed price for the whole evening. Not calculated per guest. */
+  packagePrice: number;
+  /** How the package is priced — the "one package, one price" section */
+  pricing: {
+    eyebrow: string;
+    /** short line shown next to the price */
+    tagline: string;
+    body: string[];
+    /** what the price is built around */
+    foundations: { title: string; body: string }[];
+  };
   packageItems: PackageItem[];
   /** Personal touches included with the package */
   touches: Touch[];
@@ -70,21 +84,44 @@ export type Proposal = {
 
 export const proposal: Proposal = {
   id: "wedding-open-bar-200",
-  reference: "ALC-2026-001",
+  reference: "ALC-2026-001-R2",
   title: "Wedding Reception",
   packageName: "Open Bar Package",
   event: {
     type: "Wedding Reception",
     date: null, // TODO: event date, e.g. "2026-11-21"
     venue: null, // TODO: venue name
-    guests: 200,
+    guests: 150,
+    guestRange: { min: 150, max: 200 },
   },
   preparedFor: "Serine & Nibal",
-  issuedOn: "2026-10-15",
+  issuedOn: "2026-10-26",
   intro:
-    "A full open bar for your evening, set up, poured and served by the Alchemy team. Choose the add-ons you want and the total updates as you go.",
+    "A full open bar for your evening, set up, poured and served by the Alchemy team. One package, priced for the night as a whole. Choose the add-ons you want and the total updates as you go.",
   currency: "USD",
-  baseRatePerGuest: 8,
+  packagePrice: 1600,
+  pricing: {
+    eyebrow: "How your package is priced",
+    tagline: "One price for the evening, for 150 to 200 guests.",
+    body: [
+      "Your Alchemy package is priced for the evening as a whole, not per head. What we bring to your wedding is the same whatever the final count: our own bar, built and styled at your venue; a bartending team pouring from the first toast to the last dance; the spirits, shots and fresh garnishes behind it; and the personal touches that make the night yours.",
+      "Because these foundations don\u2019t change between 150 and 200 guests, neither does the price. Your package is $1,600 across that range \u2014 settled now, so the bar is one thing you never have to revisit as the guest list takes shape.",
+    ],
+    foundations: [
+      {
+        title: "The bar itself",
+        body: "Our wood counter, warm lighting and greenery, brought to your venue, set up and styled for your wedding.",
+      },
+      {
+        title: "The team behind it",
+        body: "Alchemy bartenders mixing, shaking and serving in front of your guests, all night long.",
+      },
+      {
+        title: "Everything poured",
+        body: "The full spirits selection, shots, and fruit and garnishes prepared fresh on the night.",
+      },
+    ],
+  },
   packageItems: [
     { category: "Vodka", selection: "Peak Hills" },
     { category: "Gin", selection: "Peak Hills" },
@@ -97,7 +134,7 @@ export const proposal: Proposal = {
     {
       category: "Tequila",
       selection: "Tequila shots & rounds",
-      tag: { label: "+$1 / guest", kind: "extra" },
+      tag: { label: "+$200", kind: "extra" },
       note: "Optional add-on",
     },
   ],
@@ -133,21 +170,21 @@ export const proposal: Proposal = {
       name: "Welcome Drinks",
       description:
         "Drinks served to guests as they arrive. Not included in the standard package.",
-      ratePerGuest: 1,
+      price: 200,
     },
     {
       id: "tequila",
       name: "Tequila Shots & Rounds",
       description:
         "Shots are already included in your bar. This adds tequila shots and rounds on top.",
-      ratePerGuest: 1,
+      price: 200,
     },
     {
       id: "premium-bar",
       name: "Premium Bar Upgrade",
       description:
         "An upgraded bar setup and presentation, including wine service alongside the existing package. It changes the bar's design and presentation, not the spirits.",
-      ratePerGuest: 1,
+      price: 200,
     },
   ],
   gallery: [
@@ -173,12 +210,13 @@ export const proposal: Proposal = {
     },
   ],
   notes: [
-    "The standard open bar package is priced at $8 per guest, for a total of $1,600 based on 200 guests.",
-    "Shots (vodka, gin and whiskey) are included in the standard package. Tequila shots and rounds are an optional add-on at $1 per guest.",
-    "The customized cups, the drinks surprise, the event theme and the bartenders' customized outfits are included in the package.",
-    "Welcome drinks, tequila shots and rounds, and the premium bar upgrade are optional. Each selected add-on is charged at $1 per guest ($200 for 200 guests).",
-    "The premium bar upgrade includes wine service and an enhanced bar setup and design. It does not change the quality or brands of the spirits in the standard package.",
-    "Final pricing depends on the add-ons you select. The maximum total includes all three optional add-ons.",
+    "The open bar package is a fixed event package of $1,600. It is priced for the evening as a whole and remains the same for 150 to 200 guests; it is not calculated per guest.",
+    "The package covers the Alchemy bar and its setup and styling at your venue, the bartending team, and the spirits, shots and garnishes listed in the bar menu, served throughout the evening.",
+    "Shots (vodka, gin and whiskey) are included in the package. Tequila shots and rounds are an optional add-on at $200.",
+    "The customized cups, the drinks surprise, the event theme and the bartenders' customized outfits are included in the package at no extra cost.",
+    "Welcome drinks, tequila shots and rounds, and the premium bar upgrade are optional. Each selected add-on is a flat $200 for the evening, whatever the guest count.",
+    "The premium bar upgrade includes wine service and an enhanced bar setup and design. It does not change the quality or brands of the spirits in the package.",
+    "Final pricing depends on the add-ons you select. Should your guest count move beyond 200, we will gladly revise the quotation for you.",
   ],
   contact: {
     whatsapp: null,

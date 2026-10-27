@@ -2,7 +2,7 @@
 // It uses the same data as the web page, plus the add-ons the client has ticked.
 import { Document, Font, Image as PdfImage, Page, Path, StyleSheet, Svg, Text, View } from "@react-pdf/renderer";
 import type { Proposal } from "@/data/proposal";
-import { addOnPrice, basePrice, computeTotal, formatDate, formatMoney } from "@/lib/pricing";
+import { addOnPrice, basePrice, computeTotal, formatDate, formatMoney, guestRangeLabel } from "@/lib/pricing";
 
 const C = {
   ivory: "#fbf7f0",
@@ -87,7 +87,14 @@ const s = StyleSheet.create({
   pill: { fontWeight: 700, fontSize: 5.8, letterSpacing: 1, paddingVertical: 2, paddingHorizontal: 5, borderRadius: 6 },
   included: { color: C.sage, backgroundColor: "#e9ece3" },
   extra: { color: "#ffffff", backgroundColor: C.goldBright },
-  baseBox: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 6, backgroundColor: C.cream, borderRadius: 4, paddingVertical: 7, paddingHorizontal: 10 },
+  baseBox: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 6, backgroundColor: C.cream, borderRadius: 4, borderWidth: 0.6, borderColor: C.goldBright, paddingVertical: 8, paddingHorizontal: 10 },
+  priceCard: { flexDirection: "row", backgroundColor: C.paper, borderWidth: 0.6, borderColor: C.line, borderRadius: 6, overflow: "hidden" },
+  priceCopy: { flex: 1.15, padding: 12 },
+  priceSide: { flex: 1, padding: 12, backgroundColor: "#f8f2e6", borderLeftWidth: 0.6, borderLeftColor: C.line },
+  priceLead: { fontFamily: "Cormorant", fontStyle: "italic", fontWeight: 500, fontSize: 14, color: C.ink, lineHeight: 1.2 },
+  priceBody: { fontSize: 7.6, lineHeight: 1.55, color: C.ink, marginTop: 5, opacity: 0.85 },
+  priceTotalRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end", marginTop: 8, paddingTop: 6, borderTopWidth: 0.6, borderTopColor: C.goldBright, borderStyle: "dashed" },
+  foundation: { flexDirection: "row", marginTop: 6 },
   grid2: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" },
   touch: { width: "49%", backgroundColor: C.paper, borderWidth: 0.6, borderColor: C.line, borderRadius: 6, padding: 9, marginBottom: 6 },
   touchTitle: { fontFamily: "Cormorant", fontWeight: 600, fontSize: 12.5 },
@@ -143,7 +150,7 @@ export function QuotationPdf({ p, selected, origin }: { p: Proposal; selected: s
   const facts = [
     ["EVENT", p.event.type],
     ["GUESTS", String(p.event.guests)],
-    ["BASE RATE", `${formatMoney(p.baseRatePerGuest)} / guest`],
+    ["PACKAGE", "Fixed price"],
     ["DATE", p.event.date ? formatDate(p.event.date) : "To be confirmed"],
   ];
   const photos = [
@@ -180,7 +187,7 @@ export function QuotationPdf({ p, selected, origin }: { p: Proposal; selected: s
           )}
           <Ornament />
           <Text style={s.intro}>
-            A full open bar for your evening, set up, poured and served by the Alchemy team.
+            A full open bar for your evening, set up, poured and served by the Alchemy team. One package, priced for the night as a whole.
           </Text>
         </View>
 
@@ -193,7 +200,7 @@ export function QuotationPdf({ p, selected, origin }: { p: Proposal; selected: s
           ))}
         </View>
 
-        <Section no="01" eyebrow="Standard package" title="The bar menu" />
+        <Section no="01" eyebrow="Your package" title="The bar menu" />
         <View style={s.card}>
           {p.packageItems.map((item) => (
             <View key={item.category} wrap={false}>
@@ -210,14 +217,49 @@ export function QuotationPdf({ p, selected, origin }: { p: Proposal; selected: s
             </View>
           ))}
           <View style={s.baseBox}>
-            <Text style={{ color: C.muted }}>
-              {formatMoney(p.baseRatePerGuest)} per guest × {p.event.guests} guests
-            </Text>
-            <Text style={{ fontFamily: "Cormorant", fontWeight: 600, fontSize: 16 }}>{formatMoney(basePrice(p))}</Text>
+            <View>
+              <Text style={{ fontWeight: 700, fontSize: 6, letterSpacing: 1.8, color: C.gold }}>EVENT PACKAGE</Text>
+              <Text style={{ fontFamily: "Cormorant", fontWeight: 600, fontSize: 12, marginTop: 2 }}>{p.packageName}</Text>
+              <Text style={{ fontSize: 6.5, color: C.muted, marginTop: 1 }}>
+                One price for the evening · {guestRangeLabel(p)} · {p.event.guests} confirmed
+              </Text>
+            </View>
+            <Text style={{ fontFamily: "Cormorant", fontWeight: 600, fontSize: 18 }}>{formatMoney(basePrice(p))}</Text>
           </View>
         </View>
 
-        <Section no="02" eyebrow="Included in your package" title="The Alchemy touch" />
+        <Section no="02" eyebrow={p.pricing.eyebrow} title="One package, one price" />
+        <View style={s.priceCard} wrap={false}>
+          <View style={s.priceCopy}>
+            <Text style={s.priceLead}>Priced for the evening, not per head.</Text>
+            {p.pricing.body.map((para, i) => (
+              <Text key={i} style={s.priceBody}>{para}</Text>
+            ))}
+            <View style={s.priceTotalRow}>
+              <View>
+                <Text style={{ fontWeight: 700, fontSize: 6, letterSpacing: 1.8, color: C.gold }}>{p.packageName.toUpperCase()}</Text>
+                <Text style={{ fontSize: 6.5, color: C.muted, marginTop: 2 }}>
+                  The same price for {p.event.guestRange.min} to {p.event.guestRange.max} guests
+                </Text>
+              </View>
+              <Text style={{ fontFamily: "Cormorant", fontWeight: 600, fontSize: 20 }}>{formatMoney(basePrice(p))}</Text>
+            </View>
+          </View>
+          <View style={s.priceSide}>
+            <Text style={{ fontWeight: 700, fontSize: 6, letterSpacing: 1.8, color: C.gold }}>WHAT YOUR PACKAGE IS BUILT AROUND</Text>
+            {p.pricing.foundations.map((f, i) => (
+              <View key={f.title} style={s.foundation}>
+                <Text style={s.roman}>{roman[i]}</Text>
+                <View style={{ flex: 1 }}>
+                  <Text style={{ fontFamily: "Cormorant", fontWeight: 600, fontSize: 11 }}>{f.title}</Text>
+                  <Text style={[s.body, { marginTop: 1 }]}>{f.body}</Text>
+                </View>
+              </View>
+            ))}
+          </View>
+        </View>
+
+        <Section no="03" eyebrow="Included in your package" title="The Alchemy touch" />
         <View style={s.grid2}>
           {p.touches.map((t) => (
             <View key={t.id} style={s.touch} wrap={false}>
@@ -234,7 +276,7 @@ export function QuotationPdf({ p, selected, origin }: { p: Proposal; selected: s
       {/* PAGE 2 — add-ons, bar tab, events, terms, last step */}
       <Page size="A4" style={s.page}>
         <Frame />
-        <Section no="03" eyebrow="Optional add-ons & upgrades" title="Make it yours" />
+        <Section no="04" eyebrow="Optional add-ons & upgrades" title="Make it yours" />
         <View style={[s.card, { padding: 0 }]}>
           {p.addOns.map((a, i) => {
             const on = selected.includes(a.id);
@@ -256,8 +298,8 @@ export function QuotationPdf({ p, selected, origin }: { p: Proposal; selected: s
                   <Text style={[s.body, { marginTop: 1 }]}>{a.description}</Text>
                 </View>
                 <View style={{ alignItems: "flex-end", width: 70 }}>
-                  <Text style={{ fontFamily: "Cormorant", fontWeight: 600, fontSize: 13 }}>+{formatMoney(addOnPrice(p, a.ratePerGuest))}</Text>
-                  <Text style={{ fontSize: 6.5, color: C.muted }}>{formatMoney(a.ratePerGuest)} × {p.event.guests} guests</Text>
+                  <Text style={{ fontFamily: "Cormorant", fontWeight: 600, fontSize: 13 }}>+{formatMoney(addOnPrice(a))}</Text>
+                  <Text style={{ fontSize: 6.5, color: C.muted }}>Flat, for the evening</Text>
                   <Text style={{ fontSize: 6, fontWeight: 700, letterSpacing: 0.8, marginTop: 2, color: on ? C.gold : C.muted }}>
                     {on ? "SELECTED" : "NOT SELECTED"}
                   </Text>
@@ -271,7 +313,7 @@ export function QuotationPdf({ p, selected, origin }: { p: Proposal; selected: s
           <Text style={{ fontFamily: "Cormorant", fontStyle: "italic", fontSize: 17, textAlign: "center" }}>Your bar tab</Text>
           <View style={s.dash} />
           <View style={s.tabRow}>
-            <Text>Open bar package ({formatMoney(p.baseRatePerGuest)} × {p.event.guests})</Text>
+            <Text>{p.packageName} · {guestRangeLabel(p)}</Text>
             <View style={s.leader} />
             <Text style={{ fontWeight: 600 }}>{formatMoney(base)}</Text>
           </View>
@@ -301,7 +343,7 @@ export function QuotationPdf({ p, selected, origin }: { p: Proposal; selected: s
           </View>
         </View>
 
-        <Section no="04" eyebrow="Notes & terms" title="The fine print" />
+        <Section no="05" eyebrow="Notes & terms" title="The fine print" />
         <View>
           {p.notes.map((n, i) => (
             <View key={i} style={s.note} wrap={false}>
@@ -316,7 +358,7 @@ export function QuotationPdf({ p, selected, origin }: { p: Proposal; selected: s
       {/* PAGE 3 — our events + last step */}
       <Page size="A4" style={s.page}>
         <Frame />
-        <Section no="05" eyebrow="Our events" title="Nights we've poured" />
+        <Section no="06" eyebrow="Our events" title="Nights we've poured" />
         <View style={{ flexDirection: "row", justifyContent: "space-between" }} wrap={false}>
           {photos.map(([file, caption]) => (
             <View key={file} style={s.polaroid}>

@@ -7,7 +7,7 @@ export function TermsSection({ p }: { p: Proposal }) {
   return (
     <section id="terms">
       <SectionHeading
-        index="05"
+        index="06"
         eyebrow="Notes & terms"
         title={
           <>
