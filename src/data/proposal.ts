@@ -194,7 +194,7 @@ export const proposal: Proposal = {
       id: "premium-bar",
       name: "Premium Bar Upgrade",
       description:
-        "An upgraded bar setup and presentation, including wine service alongside the existing package. It changes the bar's design and presentation, not the spirits.",
+        "An elevated bar setup and presentation for your evening. It changes the bar's design and presentation, not the spirits.",
       price: 200,
     },
   ],
@@ -226,7 +226,7 @@ export const proposal: Proposal = {
     "Shots (vodka, gin and whiskey) are included in the package. Tequila shots and rounds are an optional add-on at $200.",
     "The customized cups, the drinks surprise, the event theme and the bartenders' customized outfits are included in the package at no extra cost.",
     "Welcome drinks, tequila shots and rounds, and the premium bar upgrade are optional. Each selected add-on is a flat $200 for the evening, whatever the guest count.",
-    "The premium bar upgrade includes wine service and an enhanced bar setup and design. It does not change the quality or brands of the spirits in the package.",
+    "The premium bar upgrade covers an enhanced bar setup, design and presentation. It does not change the quality or brands of the spirits in the package.",
     "Final pricing depends on the add-ons you select. Should your guest count move beyond 200, we will gladly revise the quotation for you.",
     "This quotation is valid until 1 December 2026. Pricing and availability are held until that date and are subject to review thereafter.",
   ],
