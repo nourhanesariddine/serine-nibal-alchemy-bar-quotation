@@ -49,8 +49,8 @@ export type Proposal = {
   };
   preparedFor: string | null;
   issuedOn: string;
-  /** How long the quotation stands, in days from issuedOn */
-  validForDays: number;
+  /** ISO date until which the quotation (pricing and availability) is held */
+  validUntil: string;
   /** Validity wording, shown in the terms section and the PDF */
   validity: {
     body: string;
@@ -102,7 +102,7 @@ export const proposal: Proposal = {
   },
   preparedFor: "Serine & Nibal",
   issuedOn: "2026-10-26",
-  validForDays: 30,
+  validUntil: "2026-12-01",
   validity: {
     body:
       "To hold the package and pricing outlined here, we kindly ask that you confirm within this period. After this date, pricing and our availability for your date are subject to review, and we would be glad to issue an updated quotation on request.",
@@ -228,7 +228,7 @@ export const proposal: Proposal = {
     "Welcome drinks, tequila shots and rounds, and the premium bar upgrade are optional. Each selected add-on is a flat $200 for the evening, whatever the guest count.",
     "The premium bar upgrade includes wine service and an enhanced bar setup and design. It does not change the quality or brands of the spirits in the package.",
     "Final pricing depends on the add-ons you select. Should your guest count move beyond 200, we will gladly revise the quotation for you.",
-    "This quotation is valid for 30 days from its date of issue. Pricing and availability are held for that period and are subject to review thereafter.",
+    "This quotation is valid until 1 December 2026. Pricing and availability are held until that date and are subject to review thereafter.",
   ],
   contact: {
     whatsapp: null,

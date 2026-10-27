@@ -351,7 +351,6 @@ export function QuotationPdf({ p, selected, origin }: { p: Proposal; selected: s
           <View style={s.validityDate}>
             <Text style={{ fontWeight: 700, fontSize: 6, letterSpacing: 1.8, color: C.gold }}>VALID UNTIL</Text>
             <Text style={{ fontFamily: "Cormorant", fontWeight: 600, fontSize: 15, marginTop: 3, textAlign: "center" }}>{formatDate(validUntil(p))}</Text>
-            <Text style={{ fontSize: 6.5, color: C.muted, marginTop: 2 }}>{p.validForDays} days from issue</Text>
           </View>
           <View style={{ flex: 1, paddingVertical: 9, paddingHorizontal: 11 }}>
             <Text style={{ fontFamily: "Cormorant", fontStyle: "italic", fontWeight: 500, fontSize: 12 }}>This proposal is held for you until then.</Text>

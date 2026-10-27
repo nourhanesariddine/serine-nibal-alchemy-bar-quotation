@@ -21,7 +21,6 @@ export function TermsSection({ p }: { p: Proposal }) {
           <div className="flex flex-col items-center justify-center bg-cream px-8 py-6 text-center md:min-w-56">
             <p className="text-[0.62rem] font-bold uppercase tracking-[0.28em] text-gold">Valid until</p>
             <p className="mt-2 font-display text-[1.9rem] leading-none text-ink md:text-[2.1rem]">{formatDate(validUntil(p))}</p>
-            <p className="mt-2 text-[0.68rem] text-muted">{p.validForDays} days from issue</p>
           </div>
           <div className="px-6 py-6 md:px-8">
             <p className="font-display text-xl italic leading-snug text-ink">This proposal is held for you until then.</p>
