@@ -33,6 +33,13 @@ export function computeTotal(p: Proposal, selected: Iterable<string>) {
   return { base, lines, total, max };
 }
 
+/** ISO date on which the quotation expires: issuedOn + validForDays */
+export function validUntil(p: Proposal) {
+  const d = new Date(p.issuedOn + "T12:00:00");
+  d.setDate(d.getDate() + p.validForDays);
+  return d.toISOString().slice(0, 10);
+}
+
 export function formatDate(iso: string) {
   return new Date(iso + "T12:00:00").toLocaleDateString("en-GB", {
     day: "numeric",

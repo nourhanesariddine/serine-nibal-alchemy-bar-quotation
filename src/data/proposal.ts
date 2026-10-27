@@ -49,6 +49,12 @@ export type Proposal = {
   };
   preparedFor: string | null;
   issuedOn: string;
+  /** How long the quotation stands, in days from issuedOn */
+  validForDays: number;
+  /** Validity wording, shown in the terms section and the PDF */
+  validity: {
+    body: string;
+  };
   intro: string;
   currency: "USD";
   /** Fixed price for the whole evening. Not calculated per guest. */
@@ -96,6 +102,11 @@ export const proposal: Proposal = {
   },
   preparedFor: "Serine & Nibal",
   issuedOn: "2026-10-26",
+  validForDays: 30,
+  validity: {
+    body:
+      "To hold the package and pricing outlined here, we kindly ask that you confirm within this period. After this date, pricing and our availability for your date are subject to review, and we would be glad to issue an updated quotation on request.",
+  },
   intro:
     "A full open bar for your evening, set up, poured and served by the Alchemy team. One package, priced for the night as a whole. Choose the add-ons you want and the total updates as you go.",
   currency: "USD",
@@ -217,6 +228,7 @@ export const proposal: Proposal = {
     "Welcome drinks, tequila shots and rounds, and the premium bar upgrade are optional. Each selected add-on is a flat $200 for the evening, whatever the guest count.",
     "The premium bar upgrade includes wine service and an enhanced bar setup and design. It does not change the quality or brands of the spirits in the package.",
     "Final pricing depends on the add-ons you select. Should your guest count move beyond 200, we will gladly revise the quotation for you.",
+    "This quotation is valid for 30 days from its date of issue. Pricing and availability are held for that period and are subject to review thereafter.",
   ],
   contact: {
     whatsapp: null,

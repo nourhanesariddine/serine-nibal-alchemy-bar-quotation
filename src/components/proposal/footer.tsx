@@ -1,5 +1,6 @@
 import type { Proposal } from "@/data/proposal";
 import { PdfButton } from "./pdf-button";
+import { formatDate, validUntil } from "@/lib/pricing";
 import { Ornament, Wordmark } from "./ui";
 
 export function Footer({ p }: { p: Proposal }) {
@@ -12,7 +13,7 @@ export function Footer({ p }: { p: Proposal }) {
         Bar · Events · Experiences
       </p>
       <p className="mx-auto mt-4 max-w-sm text-xs text-muted/80">
-        This quotation is prepared exclusively for its recipient. All prices in {p.currency}.
+        This quotation is prepared exclusively for its recipient and is valid until {formatDate(validUntil(p))}. All prices in {p.currency}.
       </p>
     </footer>
   );

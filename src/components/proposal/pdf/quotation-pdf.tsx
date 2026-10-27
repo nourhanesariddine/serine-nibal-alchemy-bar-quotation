@@ -2,7 +2,7 @@
 // It uses the same data as the web page, plus the add-ons the client has ticked.
 import { Document, Font, Image as PdfImage, Page, Path, StyleSheet, Svg, Text, View } from "@react-pdf/renderer";
 import type { Proposal } from "@/data/proposal";
-import { addOnPrice, basePrice, computeTotal, formatDate, formatMoney, guestRangeLabel } from "@/lib/pricing";
+import { addOnPrice, basePrice, computeTotal, formatDate, formatMoney, guestRangeLabel, validUntil } from "@/lib/pricing";
 
 const C = {
   ivory: "#fbf7f0",
@@ -95,6 +95,8 @@ const s = StyleSheet.create({
   priceBody: { fontSize: 7.6, lineHeight: 1.55, color: C.ink, marginTop: 5, opacity: 0.85 },
   priceTotalRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end", marginTop: 8, paddingTop: 6, borderTopWidth: 0.6, borderTopColor: C.goldBright, borderStyle: "dashed" },
   foundation: { flexDirection: "row", marginTop: 6 },
+  validity: { flexDirection: "row", borderWidth: 0.6, borderColor: C.goldBright, borderRadius: 6, backgroundColor: C.paper, marginBottom: 8, overflow: "hidden" },
+  validityDate: { width: 118, backgroundColor: C.cream, paddingVertical: 10, paddingHorizontal: 10, alignItems: "center", justifyContent: "center" },
   grid2: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" },
   touch: { width: "49%", backgroundColor: C.paper, borderWidth: 0.6, borderColor: C.line, borderRadius: 6, padding: 9, marginBottom: 6 },
   touchTitle: { fontFamily: "Cormorant", fontWeight: 600, fontSize: 12.5 },
@@ -152,6 +154,7 @@ export function QuotationPdf({ p, selected, origin }: { p: Proposal; selected: s
     ["GUESTS", String(p.event.guests)],
     ["PACKAGE", "Fixed price"],
     ["DATE", p.event.date ? formatDate(p.event.date) : "To be confirmed"],
+    ["VALID UNTIL", formatDate(validUntil(p))],
   ];
   const photos = [
     ["event-toast", "The toast"],
@@ -344,6 +347,20 @@ export function QuotationPdf({ p, selected, origin }: { p: Proposal; selected: s
         </View>
 
         <Section no="05" eyebrow="Notes & terms" title="The fine print" />
+        <View style={s.validity} wrap={false}>
+          <View style={s.validityDate}>
+            <Text style={{ fontWeight: 700, fontSize: 6, letterSpacing: 1.8, color: C.gold }}>VALID UNTIL</Text>
+            <Text style={{ fontFamily: "Cormorant", fontWeight: 600, fontSize: 15, marginTop: 3, textAlign: "center" }}>{formatDate(validUntil(p))}</Text>
+            <Text style={{ fontSize: 6.5, color: C.muted, marginTop: 2 }}>{p.validForDays} days from issue</Text>
+          </View>
+          <View style={{ flex: 1, paddingVertical: 9, paddingHorizontal: 11 }}>
+            <Text style={{ fontFamily: "Cormorant", fontStyle: "italic", fontWeight: 500, fontSize: 12 }}>This proposal is held for you until then.</Text>
+            <Text style={[s.body, { color: C.ink, opacity: 0.85 }]}>{p.validity.body}</Text>
+            <Text style={{ fontSize: 6, letterSpacing: 1.2, color: C.muted, marginTop: 4 }}>
+              REF. {p.reference} · ISSUED {formatDate(p.issuedOn).toUpperCase()}
+            </Text>
+          </View>
+        </View>
         <View>
           {p.notes.map((n, i) => (
             <View key={i} style={s.note} wrap={false}>

@@ -1,5 +1,5 @@
 import type { Proposal } from "@/data/proposal";
-import { basePrice, formatDate, formatMoney, guestRangeLabel } from "@/lib/pricing";
+import { basePrice, formatDate, formatMoney, guestRangeLabel, validUntil } from "@/lib/pricing";
 import { Ornament, Wordmark } from "./ui";
 
 function Corner({ className }: { className: string }) {
@@ -75,6 +75,9 @@ export function Hero({ p }: { p: Proposal }) {
         </div>
         <p className="mt-[1vh] text-[0.68rem] tracking-[0.08em] text-muted">
           One price for the evening · {guestRangeLabel(p)}
+        </p>
+        <p className="mt-[1.6vh] text-[0.6rem] font-semibold uppercase tracking-[0.25em] text-muted/80">
+          Ref. {p.reference} · Issued {formatDate(p.issuedOn)} · Valid until {formatDate(validUntil(p))}
         </p>
       </div>
     </section>
